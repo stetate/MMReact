@@ -48,7 +48,7 @@ var SetupView = React.createClass({
   getDefaultProps: function () {
     return {
       date: new Date(),
-      timeZoneOffsetInHours: (-1) * (new Date()).getTimezoneOffset() / 60,
+      timeZoneOffsetInHours: (-1) * (new Date().getTimezoneOffset() / 60),
     };
   },
 

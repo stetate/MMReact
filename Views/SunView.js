@@ -46,7 +46,8 @@ var SunView = React.createClass({
     render: function(){
         return(
             <View>
-            <Text> SunRiseSet(2015,12,24,44.3, -79.6) </Text>
+            SunRiseSet(2015,12,24,44.3, -79.6)
+            <Text> "SunRiseSet(2015,12,24,44.3, -79.6)" </Text>
             </View>
             );
     },

@@ -1,16 +1,44 @@
 'use strict';
  
 var React = require('react-native');
-var Sun = require('../JSCode/sun')
+
  
 var {
     StyleSheet,
     View,
+    Text,
     Component
    } = React;
  
 var styles = StyleSheet.create({
- 
+  textinput: {
+    height: 26,
+    width: 50,
+    borderWidth: 0.5,
+    borderColor: '#0f0f0f',
+    padding: 4,
+    fontSize: 13,
+  },
+  labelContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 2,
+  },
+  labelView: {
+    marginRight: 10,
+    paddingVertical: 2,
+  },
+  label: {
+    fontWeight: '500',
+  },
+  headingContainer: {
+    padding: 4,
+    backgroundColor: '#f6f7f8',
+  },
+  heading: {
+    fontWeight: '500',
+    fontSize: 14,
+  },
 });
  
 
@@ -18,10 +46,10 @@ var SunView = React.createClass({
     render: function(){
         return(
             <View>
-
+            <Text> SunRiseSet(2015,12,24,44.3, -79.6) </Text>
             </View>
             );
-    }
+    },
 
     SunRiseSet: function(year,month,day,latitude,longitude) {
           // Based on method in sci.astro FAQ by Paul Schlyter
@@ -52,7 +80,7 @@ var SunView = React.createClass({
           HA0=rev(HA0)/15;
           // return rise and set times
           return new Array((MT-HA0),(MT+HA0));
-        }
+        },
 
     SunRa: function(year,month,day,hours,latitude,longitude) {
           // Based on method in sci.astro FAQ by Paul Schlyter

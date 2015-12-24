@@ -75,12 +75,12 @@ var SetupView = React.createClass({
         return (
           <View>
             <WithLabel label="Current Time:">
-               <Text>{
+            <Text>{
               this.state.date.toLocaleDateString() +
               ' ' +
-                this.state.date.toLocaleTimeString()
-              }</Text>
-            </WithLabel>
+              this.state.date.toLocaleTimeString()
+            }</Text>
+
             <WithLabel label="Timezone:">
               <TextInput
                 onChange={this.onTimezoneChange}
@@ -88,9 +88,13 @@ var SetupView = React.createClass({
                 value={this.state.timeZoneOffsetInHours.toString()}/>
               <Text> hours from UTC</Text>
             </WithLabel>
-   
-              <Heading label="Date + time picker" />
-              <DatePickerIOS date={this.state.date} mode="datetime" timeZoneOffsetInMinutes={this.state.timeZoneOffsetInHours * 60} onDateChange={this.onDateChange}/>
+
+             <Heading label="Date + time picker" />
+              <DatePickerIOS date={this.state.date} 
+              mode="datetime" 
+              timeZoneOffsetInMinutes={this.state.timeZoneOffsetInHours * 60} 
+              onDateChange={this.onDateChange}>
+              </DatePickerIOS>
 
               <Text style={styles.description}>
               humbug its finally is working

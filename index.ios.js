@@ -34,6 +34,7 @@ var Messier = React.createClass({
                 <TabBarIOS.Item
                     selected={this.state.selectedTab === 'setup'}
                     icon={{uri:base64Icon, scale: 3}}
+                    selected={this.state.selectedTab === 'setup'}
                     text="setup"
                     onPress={() => {
                         this.setState({
@@ -45,6 +46,7 @@ var Messier = React.createClass({
                 <TabBarIOS.Item
                     selected={this.state.selectedTab === 'sun'}
                     icon={{uri:base64Icon, scale: 3}}
+                    selected={this.state.selectedTab === 'sun'}
                     onPress={() => {
                         this.setState({
                             selectedTab: 'sun'
@@ -55,6 +57,7 @@ var Messier = React.createClass({
                 <TabBarIOS.Item
                     selected={this.state.selectedTab === 'moon'}
                     icon={{uri:base64Icon, scale: 3}}
+                    selected={this.state.selectedTab === 'moon'}
                     onPress={() => {
                         this.setState({
                             selectedTab: 'moon'
@@ -65,6 +68,7 @@ var Messier = React.createClass({
                 <TabBarIOS.Item
                     selected={this.state.selectedTab === 'marathon'}
                     icon={{uri:base64Icon, scale: 3}}
+                    selected={this.state.selectedTab === 'marathon'}
                     onPress={() => {
                         this.setState({
                             selectedTab: 'marathon'

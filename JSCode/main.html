@@ -1,0 +1,392 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="keywords" content="rasc, calgary, astronomy, Messier Marathon Planner">
+<meta name="description" content="Messier Marathon Planner">
+<link rel="stylesheet" type="text/css" href="../fgstyles0.css">
+<link rel="stylesheet" type="text/css" href="darksky.css">
+<title>The Messier Marathon Planner by Larry McNish</title>
+<script type="text/javascript" language="JavaScript" src="../fgcommon.js">
+	</script>
+<script language="JavaScript" type="text/javascript" src="library/messierrts.js">
+	</script>
+<script language="JavaScript" type="text/javascript" src="library/clock.js">
+	</script>
+<script language="JavaScript" type="text/javascript" src="library/degrees.js">
+	</script>
+<script language="JavaScript" type="text/javascript" src="library/astro.js">
+	</script>
+<script language="JavaScript" type="text/javascript" src="library/sun.js">
+	</script>
+<script language="JavaScript" type="text/javascript" src="library/moon.js">
+	</script>
+<script type="text/javascript" language="JavaScript">
+<!-- // For browser compatibility
+// Utility for Messier Marathons.
+// Copyright (c) 2005,2013 by Larry McNish. All Rights Reserved,
+// I accept no liability for any errors in my coding but please let me know of any errors you find.
+// Global variables
+	var selectedMonthArray=new Array('January', 'February', 'March', 'April', 'May', 'June',
+						'July', 'August', 'September', 'October', 'November', 'December');
+	var DaysPerMonth=new Array(31,28,31,30,31,30,31,31,30,31,30,31);
+	var Days=new Array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');
+	var selected=new Date();     // today's initial values needed for Form and Reset
+	var selectedYear=selected.getFullYear();
+	var selectedMonth=selected.getMonth();
+	var selectedDate=selected.getDate();
+	var selectedDow=selected.getDay();
+	var ly;
+	var ilp;
+	var ilp2;
+	var imtxt;
+	var dttxt;
+	var kookie;
+	var kparameters;
+	var gorun=true;
+	var numcolums=16;
+
+	if (document.layers) {
+		alert ('Messier Marathon Planner will not work on Netscape 4.');
+		gorun=false;;
+	}
+	else if (document.getElementById||document.all) {
+		//alert ('document.getElementById||document.all');
+	}
+	else {
+		alert ('Browser type not detected. Messier Marathon Planner may not work.');
+	}
+
+// -->
+</script>
+</head>
+
+<body>
+<div class="binfo"><a name="top"></a>
+<noscript>
+	<center>
+	<strong>The Messier Marathon Planner requires JavaScript. Please enable JavaScript to use this page.<br><br></strong>
+	</center>
+</noscript>
+
+<center>
+<form action="" method="POST" id="newCal" name="newCal">
+<table bgcolor="#ffffee" summary="" border="1">
+	<tr>
+		<td><center><span class="coname">Larry McNish's<br>Messier Marathon Planner Version 1.31</span></center></td>
+	</tr>
+</table>
+
+<table bgcolor="#ffffee" summary="" border="1">
+<tr>
+	<td><div class="binfo">
+	<br>
+	Title: <input name="caltitle" type="text" size="28" value="Messier Marathon Planner">
+	&nbsp;For:&nbsp; 
+<script type="text/javascript" language="JavaScript">
+<!-- // For browser compatibility
+// The following is needed so that the Reset button resets the default year,month,and date to our initial value instead of a blank
+	imtxt='<select id="calendaryear" name="calendaryear" onchange="ChangeYear();">';
+	for (ilp=2005;ilp<=2020;ilp++) {
+		if (ilp==selectedYear) {imtxt+='<option selected>'+ilp;}
+		else {imtxt+='<option>'+ilp;}
+	}
+	imtxt+='<\/select>&nbsp;';
+
+	imtxt+='<select id="calendarmonth" name="calendarmonth" onchange="ChangeMonth();">';
+	for (ilp=0;ilp<12;ilp++) {
+		if (ilp==selectedMonth) {imtxt+='<option selected>'+selectedMonthArray[ilp];}
+		else {imtxt+='<option>'+selectedMonthArray[ilp];}
+	}
+	imtxt+='<\/select>&nbsp;';
+
+	imtxt+='<select id="calendardate" name="calendardate">';
+	for (ilp=0;ilp<=DaysPerMonth[selectedMonth]-1;ilp++) {  // days 1-31 - will be truncated to proper days per month
+		if (ilp+1==selectedDate) {imtxt+='<option selected>'+(ilp+1);}
+		else {imtxt+='<option>'+(ilp+1);}
+	}
+	imtxt+='<\/select>';
+
+	document.write(imtxt);
+// -->
+</script>
+<hr>Longitude: Deg: <input name="longdeg" type="text" size="3" value="114">
+Min: <input name="longmin" type="text" size="5" value="1.62">
+<input type="radio" name="optLongitude" value="LW" checked>West<input type="radio"name="optLongitude" value="LE">East
+<span class="binfor">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UTC Offset (Hrs):&nbsp;<input name="utchrs" type="text" size="3" value="7.0"></span><br>
+<!-- &nbsp;<input type="radio" name="optDst" value="STD" checked>STD<input type="radio" name="optDst" value="DST">DST<br> -->
+ Latitude:&nbsp;&nbsp;&nbsp;Deg: <input name="latdeg" type="text" size="3" value="50">
+Min: <input name="latmin" type="text" size="5" value="46.2">
+<input type="radio" name="optLatitude" value="LN" checked>North<input type="radio"name="optLatitude" value="LS">South
+&nbsp;&nbsp;
+<input type="button" name="cmdSubmit" value="Submit" onclick="DoMarathon();">
+<input type="reset" name="cmdReset" onclick="Reset();">
+<input type="button" name="cmdKillCookie" onclick="Killkookie();"><br>
+<center>
+<input type="checkbox" name="chkUseCookie"><strong>Remember title and location values.</strong><br>
+<span class="binfor">Enter your <strong>Standard Time</strong> offset in "UTC Offset (Hrs)" above.<br>
+All times are displayed in <strong>Standard Time</strong>. If Daylight Saving time is<br>
+ in effect at the designated location, <strong>add</strong> one hour to all <strong>event</strong> times.</span>
+</center>
+<hr>
+<center>
+<strong>Horizon Limits:</strong> Deg:
+<script type="text/javascript" language="JavaScript">
+<!-- // For browser compatibility
+	imtxt='<select id="horizon" name="horizon">';
+	for (ilp=0;ilp<=20;ilp++) {
+		if (ilp==10) {imtxt+='<option selected>'+ilp;}
+		else {imtxt+='<option>'+ilp;}
+	}
+	imtxt+='<\/select>&nbsp;';
+	document.write(imtxt);
+// -->
+</script>
+&nbsp;&nbsp;
+<select id="twilight" name="twilight"><option>Ignore<option>Civil 6&deg;<option>Nautical 12&deg;<option selected>Astronomical 18&deg;</select><br>
+<strong>Order table by:</strong>
+<input type="radio" name="optType" value="sortNo">Messier #
+<input type="radio"name="optType" value="sortRA">RA
+<input type="radio"name="optType" value="sortDec">Dec
+<input type="radio"name="optType" value="sortDec">m<sub>v</sub>
+<input type="radio"name="optType" value="sortOpt" checked><strong>Viewing sequence</strong><br>
+<select id="sequence" name="sequence" onclick="SetViewSeq();">
+	<option>Phil Harrington - Astronomy, March 2002
+	<option>Don Machholz - Messier Marathon Observer's Guide
+	<option>Ed Ting - Sky &amp; Telescope, March 2000
+	<option>Tomm Lorenzin, 1997
+   <option>Astronomy Magazine, March 2006
+	<option>Larry McNish for 51&deg;N, 2006
+   <option selected>Tom Cameron for Calgary RASC WCO
+</select>
+<img src="../images/enter.gif" width="17" height="18" alt="">
+<br>
+<strong>- Other Options -</strong><br>
+<input type="checkbox" name="chkImages" checked="checked">Include Images
+<input type="checkbox" name="chkShowAltAz">Show Max Altitude (+time +Azimuth)
+<input type="checkbox" name="chkRemarks" checked="checked">Include Remarks<br>
+<input type="checkbox" name="chkTransits">Include Times of Rising, Transiting, and Setting (takes much longer to do)
+<!-- <br><textarea class="binfo" name="debug" rows="4" cols="80" readonly="readonly"></textarea><br> -->
+<br>
+</center>
+</div></td>
+</tr>
+</table>
+
+<script type="text/javascript" language="JavaScript">
+<!-- // For browser compatibility
+	// The following is needed so that the reset button resets the defaults to the values in a cookie
+	// See if a set of parameters was saved in a cookie
+	kookie=GetCookie("FGMessier");
+	if (kookie!=null) { // unescaped
+		//alert(kookie);          // Messier Marathon Planner;114;0.0;7.0;true;51;0.0;true
+		//alert(document.cookie); // FGMessier=Messier%20Marathon%20Planner%3B114%3B0.0%3B7.0%3Btrue%3B51%3B0.0%3Btrue
+		//alert(getCookieVal(0)); // FGMessier=Messier Marathon Planner;114;0.0;7.0;true;51;0.0;true
+		//DOMGetElement("debug").innerText=getCookieVal(0);
+		kparameters=kookie.split(';')
+		// set kparameters on the form
+		document.newCal.caltitle.defaultValue=kparameters[0];
+		document.newCal.caltitle.value=kparameters[0];
+		document.newCal.longdeg.defaultValue=kparameters[1];
+		document.newCal.longdeg.value=kparameters[1];
+		document.newCal.longmin.defaultValue=kparameters[2];
+		document.newCal.longmin.value=kparameters[2];
+		document.newCal.utchrs.defaultValue=kparameters[3];
+		document.newCal.utchrs.value=kparameters[3];
+		if (kparameters[4]=="true"){
+			document.newCal.optLongitude[0].defaultChecked=true;
+			document.newCal.optLongitude[0].checked=true;
+			document.newCal.optLongitude[1].defaultChecked=false;
+			document.newCal.optLongitude[1].checked=false;
+			}
+		else {
+			document.newCal.optLongitude[1].defaultChecked=true;
+		 	document.newCal.optLongitude[1].checked=true;
+			document.newCal.optLongitude[0].defaultChecked=false;
+			document.newCal.optLongitude[0].checked=false;
+			} 
+		document.newCal.latdeg.defaultValue=kparameters[5];
+		document.newCal.latdeg.value=kparameters[5];
+		document.newCal.latmin.defaultValue=kparameters[6];
+		document.newCal.latmin.value=kparameters[6];
+		if (kparameters[7]=="true"){
+		 	document.newCal.optLatitude[0].defaultChecked=true;
+			document.newCal.optLatitude[0].checked=true;
+		 	document.newCal.optLatitude[1].defaultChecked=false;
+			document.newCal.optLatitude[1].checked=false;
+			}
+		else {
+		 	document.newCal.optLatitude[1].defaultChecked=true;
+		 	document.newCal.optLatitude[1].checked=true;
+		 	document.newCal.optLatitude[0].defaultChecked=false;
+		 	document.newCal.optLatitude[0].checked=false;
+			} 
+	}
+// -->
+</script>
+<br>
+
+<table id="titles1" summary="" border="0" width="750">
+<colgroup>
+	<col width="300">
+	<col width="250">
+	<col width="300">
+</colgroup>
+<tr>
+	<td id="gtitleL1" class="binfob" align="center"> </td>
+	<td id="gtitleC1" class="btitle" align="center"> </td>
+	<td id="gtitleR1" class="binfob" align="right"> </td>
+</tr>
+</table>
+<span class="binfor"><strong>NOTE: - PRINT IN LANDSCAPE MODE WITH SMALL MARGINS</strong></span><br>
+</form>
+
+<div id="mdiv">
+	<span class="btitle">Set your parameters and click Submit to generate the table.</span>
+</div>
+
+<br>
+<br>
+</center>
+</div>
+<center>
+<table class="binfo" width="750" summary="" border="0"><tr><td>
+<strong>About the Messier Marathon Planner:</strong><br>
+<br>
+What is the best order for observing Messier objects during a Messier Marathon?<br>
+<br>
+This web page will take your proposed date, your longitude, latitude,
+time zone offset from Universal (Greenwich) time, and display a complete
+list of Messier objects.
+You can also supply a title for the table, as well as set "extinguishing" values for
+horizon limitations due to air purity, elevation and different types of twilight.
+You then select whether you want a table in order by Messier number, Right Ascension, Declination, Visual magnitude (m<sub>v</sub>),
+or a selected Viewing sequence. Finally you can turn on or off options to show a small image of the objects,
+include information when the object will be at maximum altitude and whether or not to include remarks about each object. 
+Just enter your parameters and click Submit.<br> 
+<br>
+<strong>Reading the resulting table:</strong><br>
+<center>
+<table class="binfo" border="1" width="750" summary="">
+<tr><td><strong>Image</strong></td><td>If you select the "Include Images" option before clicking Submit, a small picture of the Messier object will be shown here.</td></tr>
+<tr><td><strong>Observed</strong></td><td>Use this column to check off the objects as you observe them.<br>
+If the object cannot be observed on the chosen night, the Planner will fill this in with:
+<ul>
+<li><strong>"not poss D"</strong> - the object's Declination is too low for your horizon limit
+<li><strong>"not poss S"</strong> - the object is just too near the sun to be seen after sunset or before sunrise due to the Astronomical Twilight effect
+<li><strong>"not poss A"</strong> - the highest altitude attained between sunset and sunrise is still below your horizon limit
+</ul>
+In some cases more than one will apply and each reason will be shown. If an object can not be viewed for any of these reasons, the columns Verified and Seq will be crossed out.</td></tr>
+<tr><td><strong>Verified</strong></td><td>If your Messier Marathon requires independent verification of marathoner sightings, the "verifiers" can use this column to
+initial the marathoners sightings of each object.</td></tr>
+<tr><td><strong>M#</strong></td><td>The Messier number of the object. There is some controversy around the identity of some Messier objects. The identities used here are those in the RASC Observer's Handbook.</td></tr>
+<tr><td><strong>NGC#</strong></td><td>The NGC (New General Catalogue) number for the object. Since a few Messiers do not have NGC numbers, other common designations may appear here.</td></tr>
+<tr><td><strong>Polar</strong></td><td>This designates which objects are circumpolar from the latitude selected and can theoretically be observed any time that night
+although the "best" time would be when they are highest in the sky to avoid northern horizon effects.
+It reports:
+	<ul>
+   <li>Yes - the object is circumpolar and always North of the local Zenith.
+   <li>YesT - the object is circumpolar but at its declination and your latitude, it is capable of transiting south of your local Zenith.
+   (This is possible only for locations above +45&deg; N, or below -45&deg; S.)
+   <li>** - either of the above followed by ** means the object is also fairly close to the Sun's RA.
+    In this case it would be best observed just after sunset or before sunrise, otherwise it may be too low on your northern horizon. 
+   <li>blank - the object is not circumpolar from the latitude selected
+   </ul>
+   </td></tr>
+<tr><td><strong>Seq</strong></td><td>The viewing sequence number. The following options are available in this version,
+ all predetermined lists from the following Messier Marathon sources:
+	<ul>
+   <li>Phil Harrington - Astronomy, March 2002
+   <li>Don Machholz - Messier Marathon Observer's Guide
+	<li>Ed Ting - Sky &amp; Telescope, March 2000
+	<li>Tomm Lorenzin, 1997
+   <li>Astronomy Magazine, March 2006
+   <li>Larry McNish for 51&deg;N, 2006
+   <li>Tom Cameron for Calgary RASC WCO
+   </ul></td></tr> 
+<tr><td><strong>Type</strong></td><td>The type of object as given in the RASC Handbook.</td></tr>
+<tr><td><strong>Cons</strong></td><td>The constellation associated with the Messier object.</td></tr>
+<tr><td><strong>RA hr and RA min</strong></td><td>The Right Ascension of the object (2000.0).</td></tr>
+<tr><td><strong>Dec&deg; and Dec min</strong></td><td>The Declination of the object (2000.0).</td></tr>
+<tr><td><strong>Max Alt&deg;<br>@ time<br>@ Azm&deg;</strong></td><td>If you select the "Show Max Altitude" option before clicking Submit, the following 3 columns will also be shown:
+	<ul>
+	<li><strong>Max Alt&deg;</strong> - the maximum altitude above the horizon the object will achieve between sunset and sunrise
+	<li><strong>@ time</strong> - the local time when the maximum altitude is reached 
+	<li><strong>@ Azm&deg;</strong> - the azimuth angle when the maximum altitude is reached
+	</ul></td></tr>
+
+
+
+<tr><td><strong>Rise @<br>Trans @<br>Set @</strong></td><td>If you select the "Include Times of Rising, Transiting, and Setting"
+ option before clicking Submit, the following 3 columns will also be shown:
+ <span class="binfor">(<strong>Note:</strong> at present this takes a lot longer to calculate!)</span>
+	<ul>
+	<li><strong>Rise @</strong> - the local time the object rises (if it rises between sunset and sunrise), otherwise xx:xx.
+	<li><strong>Tran @</strong> - the local time the object transits (if it transits between sunset and sunrise), otherwise xx:xx.
+    (See the comments for the <strong>Polar</strong> column above.) 
+	<li><strong>Sets @</strong> - the local time the object sets (if it sets between sunset and sunrise), otherwise xx:xx.
+	</ul></td></tr>
+   
+   
+    
+<tr><td><strong>m<sub>v</sub></strong></td><td>The visual magnitude of the object.</td></tr>
+<tr><td><strong>Size</strong></td><td>The dimensions of the object in arc minutes. (Planetary sizes are given in arc seconds.)</td></tr>
+<tr><td><strong>Dist Kly</strong></td><td>The estimated distance of the object in Kilo light years.
+One Kilo light year = 9.460536x10<sup>18</sup> m = 306.595 parsecs = 5.878504x10<sup>15</sup> mi.</td></tr>
+<tr><td><strong>Remarks</strong></td><td>Comments from the RASC Observer's Handbook and/or other sources. Entries marked "!!" are considered "showpiece" Messier objects.</td></tr>
+</table>
+</center>
+<br>
+<strong>Notes:</strong><br>
+<ul>
+<li>All times are displayed in <strong>Standard Time</strong>. With the recent change in Daylight Saving Time to the
+2nd Sunday in March to the 1st Sunday in November (in North America), your Messier Marathon will probably occur during DST
+and you will have to ADD ONE HOUR TO ALL EVENT TIMES.
+<li>A small graphic is shown beside the times of Moonrise and Moonset to show the approximate phase of the moon for the chosen day and the next day.
+<li>This program does <em>not</em> calculate the effect of the Moon's phase or brightness on the observations - Messier Marathons should always be scheduled near New Moon.
+<li>If the Moon does not rise or set on a particular day that time is shown as xx:xx.<br>
+<li>To save your title, longitude, latitude, and UTC offset settings for the next time you use the Messier Marathon Planner,
+check the "Remember New Values" checkbox before clicking Submit. This will store
+the settings in a small "cookie" on your PC. Revisiting this site or clicking the Reset button will then reset any values to the "saved" values. To eliminate
+the set of saved values click the small button to the right of the Reset button to delete the cookie.<br>
+<li>To fit the results on a single page properly, set your Internet Explorer Page Setup margins to 0.25 inch.<br>
+<li>Use "Landscape" orientation in page setup if you include descriptions, thumbnails, or other columns of information.<br> 
+</ul>
+
+<div class="binfor">Other Notes:
+<ul>
+<li>Copyright &copy; 2005-2013 by R. L. McNish All Rights Reserved <a href="http://members.shaw.ca/rlmcnish/">http://members.shaw.ca/rlmcnish/</a>
+<li>Please link to this page rather than copying it.
+<li>This page should work on Internet Explorer 5 and later and Netscape 6 and later. (Netscape 6 is very slow - I recommend Netscape 7 or later.)
+<li>All the calculations are done on your PC using JavaScript - the slower your computer, the longer the table takes to appear.
+<li>Except for high latitudes, Sun rise/set times are accurate to within a minute or two.
+<li>If Daylight Savings time is in effect at the designated location, <strong>add</strong> one hour to all <strong>event</strong> times.
+<li>If Daylight Savings time would be in effect on your PC "at home" for the chosen date then a red "DST" is shown, but this is <u><em><strong>NOT</strong></em></u> added to the event times since you may have set the parameters for a different location
+which may or may not observe DST on the same schedule as your PC.<br>
+<li>Disclaimer: I assume no liability for the use of this web page.
+<li>Some of the JavaScript used to calculate these values was written by and is Copyright &copy; Peter Hayes 2001-2013.
+His website can be found at <a href="http://www.aphayes.pwp.blueyonder.co.uk/">http://www.aphayes.pwp.blueyonder.co.uk/</a>
+<li>Current weather information for Canadian centres can be obtained from the Environment Canada web site at <a href="http://weatheroffice.ec.gc.ca/canada_e.html">http://weatheroffice.ec.gc.ca/canada_e.html</a>
+<li>Current Canadian Clear Sky information can be obtained from the Clear Sky Clock page at <a href="http://cleardarksky.com/csk/index.html#clock_list">http://cleardarksky.com/csk/index.html#clock_list</a>
+<li>Messier images from: http://astrosurf.com/jwisn/list.htm
+</ul>
+</div>
+<!-- <textarea class="binfo" id="debug" name="debug" rows="40" cols="80" readonly="readonly">&nbsp;</textarea><br> -->
+</td></tr></table>
+</center>
+
+<script type="text/javascript" language="JavaScript">
+<!-- // For browser compatibility
+ fgbot('marathon',' ','no','no','no','no');
+// -->
+</script>
+<center>
+  <!-- the following is just a simple way for me to get a visitor count -->
+  <IFRAME id="Diframe" src="http://calgary.rasc.ca/Tmessierplan.htm" width="300" height="30" frameborder="0" scrolling="no"></IFRAME><br>
+<br><br>
+</center>
+
+</body>
+</html>
+

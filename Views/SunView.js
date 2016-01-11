@@ -1,6 +1,7 @@
 'use strict';
  
 var React = require('react-native');
+var Trig = require("../generalJS/MMtrig")
  
 var {
     StyleSheet,
@@ -58,12 +59,13 @@ var SunView = React.createClass({
         var day = 5;
         var latitude = 43.01;
         var longitude= 79.01;
-        var dataSource = this.SunRiseSet(year, month, day, latitude, lonitude)
+        var dataSource = this.SunRiseSet(year, month, day, latitude, longitude)
 
         return(
-            < View  label="values" />
+            <View>
+            <WithLabel  label="values"/>
                <Text style={styles.label}> "this is the latest text" </Text>
-                <Text style={styles.label}>"this is another row of text which we can see what is happening" </Text>
+            <Text style={styles.label}>"this is another row of text which we can see what is happening" </Text>
             </View>
         )
     },
@@ -75,13 +77,14 @@ var SunView = React.createClass({
           // latitude = your local latitude: north positive, south negative
           // longitude = your local longitude: east positive, west negative
           // Calculate the Suns position at noon local zone time
+        
           var d=this.dayno(year,month,day,12.0-longitude/15);
           var oblecl=23.4393-3.563E-7*d;
           var w=282.9404+4.70935E-5*d;
           var M=356.0470+0.9856002585*d;
           var e=0.016709-1.151E-9*d;
           var E=M+e*(180/Math.PI)*sind(M)*(1.0+e*cosd(M));
-          var A=cosd(E)-e;
+          var A=this.Trig.cosd(E)-e;
           var B=Math.sqrt(1-e*e)*sind(E);
           var slon=w+atan2d(B,A);
           var sRA=atan2d(sind(slon)*cosd(oblecl),cosd(slon));

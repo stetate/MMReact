@@ -6,7 +6,6 @@ var {
     StyleSheet,
     View,
     Text,
-    navigator,
     TextInput,
     Component
    } = React;
@@ -20,17 +19,26 @@ var styles = StyleSheet.create({
     padding: 4,
     fontSize: 13,
   },
+  textview: {
+    height: 26,
+    padding: 10,
+    fontSize: 13,
+  },
   labelContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'stretch',
     marginVertical: 2,
   },
   labelView: {
     marginRight: 10,
     paddingVertical: 2,
+
   },
   label: {
-    fontWeight: '500',
+    height: 26,
+    width: 50,
+    padding: 4,
+    fontSize: 13,
   },
   headingContainer: {
     padding: 4,
@@ -74,27 +82,23 @@ var SetupView = React.createClass({
   render: function(){
         return (
           <View>
-            <WithLabel label="Current Time:">
-               <Text>{
-              this.state.date.toLocaleDateString() +
-              ' ' +
-                this.state.date.toLocaleTimeString()
-              }</Text>
-            </WithLabel>
-            <WithLabel label="Timezone:">
-              <TextInput
-                onChange={this.onTimezoneChange}
-                style={styles.textinput}
-                value={this.state.timeZoneOffsetInHours.toString()}/>
-              <Text> hours from UTC</Text>
-            </WithLabel>
-   
+         
+              <Heading label="Timezone:"/>
+              <TextInput onChange={this.onTimezoneChange} style={styles.textinput} value={this.state.timeZoneOffsetInHours.toString()}/>
+              <Text style={styles.textview}> hours from UTC</Text>
+
               <Heading label="Date + time picker" />
               <DatePickerIOS date={this.state.date} mode="datetime" timeZoneOffsetInMinutes={this.state.timeZoneOffsetInHours * 60} onDateChange={this.onDateChange}/>
 
-              <Text style={styles.description}>
-              humbug its finally is working
-            </Text>
+              <WithLabel label="Value:"></WithLabel>
+                <Text style={styles.labelView}>{
+                  this.state.date.toLocaleDateString() +
+                  ' ' +
+                  this.state.date.toLocaleTimeString()
+                }</Text>
+              
+
+
           </View>             
         );
   }

@@ -12,12 +12,10 @@ var {
    } = React;
  
 var styles = StyleSheet.create({
-    description: {
-        fontSize: 20,
-        backgroundColor: 'white'
-    },
     container: {
-        flex: 1
+        flex: 1,
+        flexDirection: 'column'
+
     }
 });
  

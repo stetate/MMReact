@@ -1,4 +1,15 @@
 'use strict';
+//use this code in the setup view for the dtae picker 
+
+              <Heading label="Date + time picker" />
+              <DatePickerIOS date={this.state.date} mode="datetime" timeZoneOffsetInMinutes={this.state.timeZoneOffsetInHours * 60} onDateChange={this.onDateChange}/>
+
+
+                <Text style={styles.labelView}>{
+                  this.state.date.toLocaleDateString() +
+                  ' ' +
+                  this.state.date.toLocaleTimeString()
+                }</Text>
 
 var React = require('react-native');
 var {

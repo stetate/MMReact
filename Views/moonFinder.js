@@ -172,7 +172,9 @@ class moonFinder{
                             t.cosd(mglong)))/15.0;
           var dec=t.rev(t.asind(t.sind(mglat)*t.cosd(obl)+t.cosd(mglat)*t.sind(obl)*t.sind(mglong)));
           if (dec > 180.0) dec=dec-360;
-          return new Array(ra,dec,mr);
+           
+          var exp = new Array(ra,dec,mr);
+          return exp
         };
 
         MoonRise(year,month,day,TZ,latitude,longitude) {
@@ -182,6 +184,9 @@ class moonFinder{
           // -2 rise or set event not found and moon was up   at 00:00
           // WARNING code changes on 6/7 May 2003 these are now local times
           // NOT UTC and rise/set not found codes changed.
+          trig = new Trig();
+          astro = new Astro();
+
           var hours=0;
           var riseset=new Array();
           // elh is the elevation at the hour elhdone is true if elh calculated
@@ -190,8 +195,8 @@ class moonFinder{
           for (var i=0; i<=24; i++) {elhdone[i]=false;}
           // Compute the moon elevation at start and end of day
           // store elevation at the hours in an array elh to save search time
-          var rad=MoonPos(year,month,day,hours-TZ);
-          var altaz=radtoaa(rad[0],rad[1],year,month,day,hours-TZ,latitude,longitude);
+          var rad=this.MoonPos(year,month,day,hours-TZ);
+          var altaz=astro.radtoaa(rad[0],rad[1],year,month,day,hours-TZ,latitude,longitude);
           elh[0]=altaz[0]; elhdone[0]=true;
           // set the return code to allow for always up or never rises
           if (elh[0] >= 0.0) {
@@ -200,8 +205,8 @@ class moonFinder{
             riseset=new Array(-1,-1);
           }  
           hours=24;
-          rad=MoonPos(year,month,day,hours-TZ);
-          altaz=radtoaa(rad[0],rad[1],year,month,day,hours-TZ,latitude,longitude);
+          rad=this.MoonPos(year,month,day,hours-TZ);
+          altaz=astro.radtoaa(rad[0],rad[1],year,month,day,hours-TZ,latitude,longitude);
           elh[24]=altaz[0]; elhdone[24]=true;
           // search for moonrise and set
           for (var rise=0; rise<2; rise++) {
@@ -213,8 +218,8 @@ class moonFinder{
                var hmid=hfirst+Math.round((hlast-hfirst)/2);
                if (!elhdone[hmid]) {
                  hours=hmid;
-                 rad=MoonPos(year,month,day,hours-TZ);
-                 altaz=radtoaa(rad[0],rad[1],year,month,day,hours-TZ,latitude,longitude);
+                 rad=this.MoonPos(year,month,day,hours-TZ);
+                 altaz=astro.radtoaa(rad[0],rad[1],year,month,day,hours-TZ,latitude,longitude);
                  elh[hmid]=altaz[0]; elhdone[hmid]=true;
                }
                if (((rise == 0) && (elh[hfirst] <= 0.0) && (elh[hmid] >= 0.0)) ||
@@ -233,8 +238,8 @@ class moonFinder{
                  found=false;
                  if (!elhdone[i+1]) {
                    hours=i+1;
-                   rad=MoonPos(year,month,day,hours-TZ);
-                   altaz=radtoaa(rad[0],rad[1],year,month,day,hours-TZ,latitude,longitude);
+                   rad=this.MoonPos(year,month,day,hours-TZ);
+                   altaz=astro.radtoaa(rad[0],rad[1],year,month,day,hours-TZ,latitude,longitude);
                    elh[hours]=altaz[0]; elhdone[hours]=true;
                  }
                  if (((rise == 0) && (elh[i] <= 0.0) && (elh[i+1] >= 0.0)) ||
@@ -247,8 +252,8 @@ class moonFinder{
              if (found) {
                var elfirst=elh[hfirst]; var ellast=elh[hlast];
                hours=hfirst+0.5;
-               rad=MoonPos(year,month,day,hours-TZ);
-               altaz=radtoaa(rad[0],rad[1],year,month,day,hours-TZ,latitude,longitude);
+               rad=this.MoonPos(year,month,day,hours-TZ);
+               altaz=astro.radtoaa(rad[0],rad[1],year,month,day,hours-TZ,latitude,longitude);
                // alert("day ="+day+" hour ="+hours+" altaz="+altaz[0]+" "+altaz[1]);
                if ((rise == 0) && (altaz[0] <= 0.0)) {hfirst=hours; elfirst=altaz[0];}
                if ((rise == 0) && (altaz[0] > 0.0)) {hlast=hours; ellast=altaz[0];}
@@ -258,7 +263,7 @@ class moonFinder{
                riseset[rise]=hfirst+(hlast-hfirst)*Math.abs(elfirst)/eld;
              }
           } // End of rise/set loop
-          return(riseset);
+          return riseset;
         };
 
         MoonPhase(year,month,day) {
@@ -277,7 +282,7 @@ class moonFinder{
           // phase angle
           var pa=180.0-D-6.289*sind(MP)+2.1*sind(M)-1.274*sind(2*D-MP)
                  -0.658*sind(2*D)-0.214*sind(2*MP)-0.11*sind(D);
-          return(rev(pa));
+          return rev(pa);
         };
 
         moons(year,moondates,moonphases) {

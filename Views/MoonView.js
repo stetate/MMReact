@@ -55,13 +55,15 @@ var MoonView = React.createClass( {
     render: function(){
         var year = 2016;
         var month = 1;
-        var day = 5;
+        var day = 31;
         var hours = 22;
-        var latitude = 44.21;
-        var longitude = -79.37;
+        var latitude = 44.35;
+        var longitude = -79.61;
+        var TZ = -5;
         var m = new moon();
 
-        m.MoonPos(year,month,day,hours)
+        var moonpos = m.MoonPos(year,month,day,hours)
+        var moonrise = m.MoonRise(year,month,day,TZ,latitude,longitude)
         //remeber that this will bring in the time in UTC so will need to be corrected for the location
         return(
             <View>

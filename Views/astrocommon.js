@@ -5,6 +5,7 @@
 // This code is made freely available but please keep this notice.
 // I accept no liability for any errors in my coding but please
 // let me know of any errors you find. My address is on my home page.
+var Trig = require('./MMtrig')
 
 class astro{
 
@@ -90,25 +91,27 @@ class astro{
         // lon is the observers longitude in degrees
         // 0.985647352 = 360 degrees / 365.2421926 <- length of the Tropical Year 2000(?) (equinox to equinox)
         // 98.9818 degrees = 6.59878666667 hours = 6h 35m 55.632s = GST on 2000 Jan 0.0 = JD 2451543.5
-        var d=dayno(year,month,day,hours);
+        var t = new Trig();
+        var d=this.dayno(year,month,day,hours);
         var lst=(98.9818+0.985647352*d+hours*15+lon);
-        return rev(lst)/15;
+        return t.rev(lst)/15;
       }
 
       radtoaa(ra,dec,year,month,day,hours,lat,lon) {
         // convert ra and dec to altitude and azimuth
         // year, month, day and hours are the Greenwich date and time
         // lat and lon are the observers latitude and longitude
-        var lst=local_sidereal(year,month,day,hours,lon);
-        var x=cosd(15.0*(lst-ra))*cosd(dec);
-        var y=sind(15.0*(lst-ra))*cosd(dec);
-        var z=sind(dec);
+        var t = new Trig();
+        var lst=this.local_sidereal(year,month,day,hours,lon);
+        var x=t.cosd(15.0*(lst-ra))*t.cosd(dec);
+        var y=t.sind(15.0*(lst-ra))*t.cosd(dec);
+        var z=t.sind(dec);
         // rotate so z is the local zenith
-        var xhor=x*sind(lat)-z*cosd(lat);
+        var xhor=x*t.sind(lat)-z*t.cosd(lat);
         var yhor=y;
-        var zhor=x*cosd(lat)+z*sind(lat);
-        var azimuth=rev(atan2d(yhor,xhor)+180.0); // so 0 degrees is north
-        var altitude=atan2d(zhor,Math.sqrt(xhor*xhor+yhor*yhor));
+        var zhor=x*t.cosd(lat)+z*t.sind(lat);
+        var azimuth=t.rev(t.atan2d(yhor,xhor)+180.0); // so 0 degrees is north
+        var altitude=t.atan2d(zhor,Math.sqrt(xhor*xhor+yhor*yhor));
         return new Array(altitude,azimuth);
       }
       //-----Calculate 24 Periodic Terms----------------------------------------------------

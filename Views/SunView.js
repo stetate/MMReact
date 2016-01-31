@@ -57,9 +57,9 @@ var SunView = React.createClass({
     render: function(){
         var year = 2016;
         var month = 1;
-        var day = 5;
-        var latitude = 44.21;
-        var longitude = -79.37;
+        var day = 31;
+        var latitude = 44.35;
+        var longitude = -79.616666;
         //remeber that this will bring in the time in UTC so will need to be corrected for the location
         var dataSource= this.SunRiseSet(year,month,day,latitude,longitude)
         return(

@@ -1,34 +1,32 @@
 'use strict';
  
 var React = require('react-native');
- 
+var moon = require('./Views/MoonView')
+
 var {
     StyleSheet,
     View,
     Text,
+    NavigatorIOS,
     Component
    } = React;
  
 var styles = StyleSheet.create({
-    description: {
-        fontSize: 20,
-        backgroundColor: 'white'
-    },
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
+        flexDirection: 'column'
     }
 });
  
 class Moon extends Component {
     render() {
         return (
-  	    <View style={styles.container}>
-	        <Text style={styles.description}>
-        	  Moon Details Tab
-	        </Text>
-	    </View>
+        < NavigatorIOS 
+            style = {styles.container}
+            initialRoute ={{
+                title: 'Moon Details',
+                component: moon
+            }}/>
         );
     }
 }
